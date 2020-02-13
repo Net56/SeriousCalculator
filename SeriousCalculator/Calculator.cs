@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SeriousCalculator
 {
-    public partial class Form1 : Form
+    public partial class Calculator : Form
     {
-        public Form1()
+        public Calculator()
         {
             InitializeComponent();
         }
@@ -128,11 +128,21 @@ namespace SeriousCalculator
             StringBuilder strBuilder = new StringBuilder(resultsBox.Text);
             strBuilder.Replace('÷', '/');
             strBuilder.Replace('×', '*');
+            try
+            {
+                DataTable dataTbl = new DataTable();
+                var answer = dataTbl.Compute(strBuilder.ToString(), "");
 
-            DataTable dataTbl = new DataTable();
-            var answer = dataTbl.Compute(strBuilder.ToString(),"");
-
-            resultsBox.Text = answer.ToString();
+                resultsBox.Text = answer.ToString();
+            }
+            catch (SyntaxErrorException)
+            {
+                MessageBox.Show("Please use a valid mathematical expression.");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
